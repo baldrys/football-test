@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Entity\Player; 
+
 class Team
 {
     private string $name;
@@ -13,6 +15,13 @@ class Team
     private array $players;
     private string $coach;
     private int $goals;
+
+    public const FULL_NAME_POSITIONS_PLURAL = [
+        Player::GOALKEEPER => "Голкиперы",
+        Player::DEFENDER => "Защитники",
+        Player::MIDFIELDER => "Полузащитники",
+        Player::FORWARD => "Нападающие",
+    ];
 
     public function __construct(string $name, string $country, string $logo, array $players, string $coach)
     {
@@ -103,4 +112,23 @@ class Team
             }
         }
     }
+
+    public function getPositions(): array
+    {
+        return Player::POSITIONS;
+    }
+
+    public function getFullNamePluralPositions(): array
+    {
+        return self::FULL_NAME_POSITIONS_PLURAL;
+    }
+
+    public function getPlayersByPosition(string $position): array
+    {
+        return array_filter($this->players, function (Player $player) use($position) {
+            return $player->getPosition() == $position;
+        });
+        
+    }
+    
 }

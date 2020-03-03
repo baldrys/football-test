@@ -92,7 +92,6 @@
 </div>
 </body>
 </html>
-
 {% macro renderTeamInfo(team) %}
     <div class="card mb-3">
         <div class="card-header text-center">
@@ -114,18 +113,30 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for player in team.players %}
-                    <tr>
+                {% set pluralPositions = team.getFullNamePluralPositions() %}
+                {% for position in team.positions %}
+                    <tr class="bg-light">
                         <td>
-                            {{ player.number }}
+                        </td>
+                        <td >
+                            {{ pluralPositions[position] }}
                         </td>
                         <td>
-                            {{ player.name }}
-                        </td>
-                        <td>
-                            {{ player.playTime }}’
                         </td>
                     </tr>
+                    {% for player in team.getPlayersByPosition(position) %}
+                        <tr>
+                            <td>
+                                {{ player.number }}
+                            </td>
+                            <td>
+                                {{ player.name }}
+                            </td>
+                            <td>
+                                {{ player.playTime }}’
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
                 </tbody>
             </table>
