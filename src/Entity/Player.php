@@ -12,6 +12,8 @@ class Player
     private int $inMinute;
     private int $outMinute;
     private string $position;
+    private string $card;
+    private string $goals;
 
     public const GOALKEEPER = 'В';
     public const DEFENDER = 'З';
@@ -34,6 +36,8 @@ class Player
         $this->outMinute = 0;
         $this->assertCorrectPosition($position);
         $this->position = $position;
+        $this->goals = 0;
+        $this->card = '';
     }
 
     public function getNumber(): int
@@ -98,5 +102,40 @@ class Player
                 )
             );
         }
+    }
+
+    public function setCard($card)
+    {
+        if($card == Match::YELLOW_CARD_MESSAGE_TYPE ) {
+            if($this->card == Match::YELLOW_CARD_MESSAGE_TYPE) {
+                $this->card = Match::RED_CARD_MESSAGE_TYPE;
+            } else {
+                $this->card = Match::YELLOW_CARD_MESSAGE_TYPE;
+            }
+        } else {
+            $this->card = Match::RED_CARD_MESSAGE_TYPE;
+        }
+
+    }
+
+    public function getCard(): string
+    {
+        if(!$this->card) {
+            return '';
+        }
+        return $this->card;
+    }
+
+    public function addGoal()
+    {
+        $this->goals++;
+    }
+
+    public function getGoals(): int
+    {
+        if(!$this->goals) {
+            return 0;
+        }
+        return $this->goals;
     }
 }

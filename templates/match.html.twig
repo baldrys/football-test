@@ -114,6 +114,8 @@
                 </thead>
                 <tbody>
                 {% set pluralPositions = team.getFullNamePluralPositions() %}
+                {% set redCard = 'redCard' %}
+                {% set yellowCard = 'yellowCard' %}
                 {% for position in team.positions %}
                     <tr class="bg-light">
                         <td>
@@ -131,6 +133,19 @@
                             </td>
                             <td>
                                 {{ player.name }}
+                                {% if player.goals > 0 %}
+                                    <img src="https://www.soccer.ru/sites/all/themes/newtheme/images/events-icons/goal.png">
+                                    {% if player.goals > 1 %}
+                                        x {{ player.goals }}
+                                    {% endif %}
+                                {% endif %}
+                                {% if player.card == yellowCard %}
+                                    <img src="https://www.soccer.ru/sites/all/themes/newtheme/images/events-icons/card.png">
+                                {% endif %}
+
+                                {% if player.card == redCard %}
+                                    <img src="https://i.imgur.com/KTniZQX.png">
+                                {% endif %}
                             </td>
                             <td>
                                 {{ player.playTime }}’
