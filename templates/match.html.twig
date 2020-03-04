@@ -87,12 +87,16 @@
             {% import _self as render %}
             {{ render.renderTeamInfo(match.homeTeam) }}
             {{ render.renderTeamInfo(match.awayTeam) }}
+            <h6>Всего сыграно минут по позиции</h6>
+            {{ render.renderTeamPlayedTimeByPositions(match.homeTeam) }}
+            {{ render.renderTeamPlayedTimeByPositions(match.awayTeam) }}
         </div>
     </div>
 </div>
 </body>
 </html>
 {% macro renderTeamInfo(team) %}
+    {% set pluralPositions = team.getFullNamePluralPositions() %}
     <div class="card mb-3">
         <div class="card-header text-center">
             <div>
@@ -113,15 +117,12 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% set pluralPositions = team.getFullNamePluralPositions() %}
-                {% set redCard = 'redCard' %}
-                {% set yellowCard = 'yellowCard' %}
                 {% for position in team.positions %}
                     <tr class="bg-light">
                         <td>
                         </td>
                         <td >
-                            {{ pluralPositions[position] }}
+                           <strong> {{ pluralPositions[position] }} </strong>
                         </td>
                         <td>
                         </td>
@@ -139,11 +140,12 @@
                                         x {{ player.goals }}
                                     {% endif %}
                                 {% endif %}
-                                {% if player.card == yellowCard %}
+                                {% if player.card == constant('App\\Entity\\Match::YELLOW_CARD_MESSAGE_TYPE') %}
+                                    {{ yellowCard }}
                                     <img src="https://www.soccer.ru/sites/all/themes/newtheme/images/events-icons/card.png">
                                 {% endif %}
 
-                                {% if player.card == redCard %}
+                                {% if player.card == constant('App\\Entity\\Match::RED_CARD_MESSAGE_TYPE') %}
                                     <img src="https://i.imgur.com/KTniZQX.png">
                                 {% endif %}
                             </td>
@@ -152,6 +154,39 @@
                             </td>
                         </tr>
                     {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endmacro %}
+{% macro renderTeamPlayedTimeByPositions(team) %}
+    {% set pluralPositions = team.getFullNamePluralPositions() %}
+    <div class="card mb-3">
+        <div class="card-header text-center">
+            <div>
+                <strong>{{ team.name }}</strong>
+                {{ team.country }}
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table">
+                <thead>
+                <tr>
+                    <th>Позиция</th>
+                    <th>Время</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for position in team.positions %}
+                    <tr>
+                        <td>
+                            {{ pluralPositions[position] }}
+                        </td>
+                        <td >
+                            {{ team.getTotalMinutesPlayedByPosition(position) }}
+                        </td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>

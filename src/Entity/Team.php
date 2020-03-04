@@ -128,7 +128,14 @@ class Team
         return array_filter($this->players, function (Player $player) use($position) {
             return $player->getPosition() == $position;
         });
-        
     }
     
+    public function getTotalMinutesPlayedByPosition(string $position): int
+    {
+        $players = $this->getPlayersByPosition($position);
+        return array_reduce($players, function ($totalMinutesPlayed, $player) {
+                $totalMinutesPlayed += $player->getPlayTime();
+                return $totalMinutesPlayed;
+            });
+    }
 }
